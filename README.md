@@ -3,7 +3,7 @@ This is a simple Python script that allows your phone to connect to mitmproxy an
 Note: Your Mac and iDevice MUST be connected to the same network.
 
 
-# To Configure:
+## To Configure:
 
 1.) Install mitmproxy by running this command in terminal:
 
