@@ -1,5 +1,6 @@
-from libmproxy.flow import Response
-from netlib.odict import ODictCaseless
+from mitmproxy.models import flow
+from mitmproxy.models import HTTPResponse
+from netlib.http import Headers
 import cgi
 import re
 from gzip import GzipFile
@@ -132,6 +133,10 @@ XML_OK_RESPONSE = '''<?xml version="1.0" encoding="UTF-8"?>
                             <array>
                             <string>powerDiagnostics</string>
                             </array>
+                            <key>iPhone8,1</key>
+                            <array>
+                            <string>powerDiagnostics</string>
+                            </array>
                             </dict>
                             </plist>'''
 
@@ -155,9 +160,9 @@ def saveContent(flow, prefix):
     decodedData = StringIO.StringIO()
     decodedData.write(flow.request.get_decoded_content())
 
-    contentType = flow.request.get_content_type()
+    mimeType = flow.request.headers.get('Content-Type', '')
     multipart_boundary_re = re.compile('^multipart/form-data; boundary=(.*)$')
-    matches = multipart_boundary_re.match(contentType) 
+    matches = multipart_boundary_re.match(mimeType) 
 
     decodedData.seek(0)
 
@@ -167,11 +172,8 @@ def saveContent(flow, prefix):
         logs.write(query['log_archive'][0])
 
 def respond(flow, content):
-    resp = Response(flow.request,
-                        [1,1],
-                        200, "OK",
-                        ODictCaseless([["Content-Type","text/xml"]]),
-                        content,
-                        None)
-    flow.request.reply(resp)
+    resp = HTTPResponse("HTTP/1.1", 200, "OK",
+                        Headers(Content_Type="text/xml"),
+                        content)
+    flow.reply(resp)
 
