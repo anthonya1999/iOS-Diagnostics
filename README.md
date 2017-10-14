@@ -5,16 +5,13 @@ Note: Your Mac and iDevice MUST be connected to the same network.
 
 ## To Configure:
 
-1.) Install mitmproxy by running this command in terminal:
+1.) Install mitmproxy by with Homebrew:
 
 ```
-sudo easy_install pip
+brew install mitmproxy
 ```
 
-2.) And then:
-```
-sudo pip install mitmproxy
-```
+Note: To install Homebrew, see here: https://brew.sh/
 
 After mitmproxy has been installed, change the directory to where you put the diags.py file, and run:
 ```
